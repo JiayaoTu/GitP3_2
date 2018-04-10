@@ -1,9 +1,9 @@
 package practice03;
 
-public class Worker {
+public class Worker extends Person{
 
-    String name;
-    int age;
+    //String name;
+    //int age;
     public String getName() {return name;}
     public int getAge(){return age;}
 
