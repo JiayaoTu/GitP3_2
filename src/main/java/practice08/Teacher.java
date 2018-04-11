@@ -2,25 +2,26 @@ package practice08;
 
 public class Teacher extends Person{
     Klass klass;
-    public String getName(){return age;}
-    public int getAge(){return id;}
+    public String getName(){return name;}
+    public int getAge(){return age;}
     public Klass getKlass() {return klass;}
     public Teacher(){}
-    public Teacher(int name,String age,int id)
+    public Teacher(int id,String name,int age)
     {
+        this.id=id;
         this.name=name;
         this.age=age;
-        this.id=id;
+
     }
 
-    public Teacher(int name,String age,int id,Klass klass)
+    public Teacher(int id,String name,int age,Klass klass)
     {
+        this.id=id;
         this.name=name;
         this.age=age;
-        this.id=id;
         this.klass=klass;
     }
-    public Teacher(int name,String age)
+    public Teacher(int id,String name)
     {
         this.name=name;
         this.age=age;
