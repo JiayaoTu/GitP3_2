@@ -1,79 +1,79 @@
 package practice11;
-import java.util.*;
-public class Teacher extends Person{
-    Klass klass;
-    HashSet classes;
 
-    public HashSet getClasses() {
+
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Set;
+
+public class Teacher extends Person implements Observer {
+
+    private Set<Klass> classes;
+
+    public Teacher(int id, String name, int age, Set<Klass> classes) {
+        super(id, name, age);
+        this.classes = classes;
+        for (Klass klass: classes) {
+            klass.addObserver(this);
+        }
+    }
+
+    public Teacher(int id, String name, int age) {
+        super(id, name, age);
+    }
+
+    public Set<Klass> getClasses() {
         return classes;
     }
-    public void setClasses(HashSet classes) {
+
+    public void setClasses(Set<Klass> classes) {
         this.classes = classes;
     }
 
-    public String getName(){return name;}
-    public int getAge(){return age;}
-    public Klass getKlass() {return klass;}
-    public Teacher(){}
-    public Teacher(int id,String name,int age)
-    {
-        this.id=id;
-        this.name=name;
-        this.age=age;
-
-    }
-
-    public Teacher(int id,String name,int age,HashSet classes)
-    {
-        this.id=id;
-        this.name=name;
-        this.age=age;
-        //   this.klass=klass;
-        this.classes=classes;
-    }
-    public Teacher(int id,String name)
-    {
-        this.name=name;
-        this.age=age;
-        //  this.klass=klass;
-    }
-
-
-    String introduce() {
-        //String str="My name is "+name+"."+" I am "+age+" years old. I am a Student. I am at Class "+klass+".";
-        if (this.getClasses() != null) {
-            String klass = "";
-            Iterator<Klass> it = this.getClasses().iterator();
-            while (it.hasNext()) {
-                String str = it.next().getNumber() + "";
-                klass += str;
-            }
-            klass = klass.split("")[0] + ", " + klass.split("")[1];
-            return this.PersoniItroduce() + " I am a Teacher. I teach Class " + klass + ".";
+    @Override
+    public String introduce() {
+        if(classes==null || classes.isEmpty()){
+            return super.introduce()+" I am a Teacher. I teach No Class.";
         }
-        return this.PersoniItroduce() + " I am a Teacher. I teach No Class.";
-
-//        if(klass==null)
-//        {
-//            return this.PersoniItroduce()+" I am a Teacher. I teach No Class.";
-//        }else {
-//            String str = this.PersoniItroduce() + " I am a Teacher. I teach Class " + klass.number + ".";
-//            return str;
-//        }
+        String classNums = "";
+        for (Klass klass:classes  ) {
+            classNums +=Integer.toString(klass.getNumber())+", ";
+        }
+        return super.introduce()+" I am a Teacher. I teach Class "+classNums.substring(0,classNums.length()-2)+".";
     }
-    String introduceWith(Student student)
-    {
-        if(isTeaching(student))
-        {
+
+    public boolean isTeaching(Student student){
+        if(classes.isEmpty())
+            return false;
+        for (Klass klass:classes) {
+            if(klass.isIn(student))
+                return true;
+        }
+        return false;
+    }
+
+    public String introduceWith(Student student) {
+        if (isTeaching(student)) {
+
             return "My name is " + this.getName() + ". I am " + this.getAge() + " years old. I am a Teacher. I teach " + student.getName() + ".";
-        }else {
-            return "My name is " + this.getName() + ". I am " + this.getAge() + " years old. I am a Teacher. I don't teach " + student.getName() + ".";
+        }
+        return "My name is " + this.getName() + ". I am " + this.getAge() + " years old. I am a Teacher. I don't teach " + student.getName() + ".";
+
+    }
+
+
+    @Override
+    public void update(Observable o, Object arg) {
+        //I am Tom. I know Jerry has joined Class 2.
+        if(arg instanceof Klass){
+            //I am Tom. I know Jerry become Leader of Class 2.
+            Klass klass = (Klass) arg;
+            Student leader = klass.getLeader();
+            System.out.print("I am "+this.getName()+". I know "+leader.getName()+" become Leader of Class "+klass.getNumber()+".\n");
+        }else if(arg instanceof Student){
+            //I am Tom. I know Jerry has joined Class 2.
+            Student student = (Student) arg;
+            Klass klass = student.getKlass();
+            System.out.print("I am "+this.getName()+". I know "+student.getName()+" has joined Class "+klass.getNumber()+".\n");
         }
     }
-
-    public Boolean isTeaching(Student student) {
-        Klass klass = student.getKlass();
-        return this.getClasses().contains(klass);
-    }
-
 }

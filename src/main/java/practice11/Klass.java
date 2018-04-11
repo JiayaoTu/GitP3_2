@@ -1,7 +1,7 @@
 package practice11;
 
-
 import java.util.*;
+
 
 public class Klass extends Observable {
 
@@ -11,7 +11,6 @@ public class Klass extends Observable {
     public int getNumber() {
         return number;
     }
-
     public void setNumber(int number) {
         this.number = number;
     }
@@ -19,7 +18,6 @@ public class Klass extends Observable {
     public Student getLeader() {
         return leader;
     }
-
     public void setLeader(Student leader) {
         this.leader = leader;
     }
